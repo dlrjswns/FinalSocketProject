@@ -1,0 +1,9 @@
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\bin\Debug\NormalClient.exe.config
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\bin\Debug\NormalClient.exe
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\bin\Debug\NormalClient.pdb
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.Client.resources
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.Properties.Resources.resources
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.csproj.GenerateResource.cache
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.csproj.CoreCompileInputs.cache
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.exe
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.pdb

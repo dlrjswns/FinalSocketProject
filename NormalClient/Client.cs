@@ -197,6 +197,11 @@ namespace NormalClient
                 string msg = tokens[1];
                 AppendText(txtHistory, string.Format("[server공지]---> {0} {1}", msg, FormatterService.GetCurrentDateToString()));
             }
+            else if (tokens[0].Equals("WHO"))
+            {
+                string connectedClientsCount = tokens[2];
+                AppendText(txtHistory, string.Format("[현재 연결된 사용자 수]---> {0}명 접속중...", connectedClientsCount));
+            }
             else
             {
                 MsgBoxHelper.Warn("userclient DataReceived 오류");
@@ -301,6 +306,18 @@ namespace NormalClient
                 bDts = Encoding.UTF8.GetBytes("LV:" + nameID + ":G:");
                 server.Send(bDts);
             }
+        }
+
+        private void connectedClientCountButton_Click(object sender, EventArgs e)
+        {
+            byte[] bDts = new byte[4096];
+            try
+            {
+                bDts = Encoding.UTF8.GetBytes("WHO:" + nameID + ":");
+                server.Send(bDts);
+            }
+            catch { }
+            txtSend.Clear();
         }
     }
 

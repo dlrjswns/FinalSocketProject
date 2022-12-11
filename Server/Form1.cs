@@ -243,10 +243,26 @@ namespace Server
                 
                 byte[] buffer = Encoding.UTF8.GetBytes(str);
                 fromID = tokens[1].Trim();
-                string rMsg = "[From:" + fromID + "에서 현재 접속중인 인원조회요청]";
+                string rMsg = "[매니저" + fromID + "에서 현재 접속중인 인원조회요청]";
                 AppendText(txtHistory, rMsg);
                 connentedClients.TryGetValue(fromID, out Socket socket);
                 sendTo(socket, buffer);
+            }
+            else if (code.Equals("WHO"))
+            {
+                fromID = tokens[1].Trim();
+                //string bufferToString = Encoding.UTF8.GetString(obj.Buffer);
+                string connectedClientsCount = connentedClients.Count.ToString();
+                string responseString = code + ':' + fromID + ':' + connectedClientsCount + ':';
+                //string[] a = responseString.Split(':');
+                //Console.WriteLine("sdf" + bufferToString);
+                Console.WriteLine("sdfsdf" + responseString);
+                //Console.WriteLine("ㅁㄴㅇㄹㄴㄹf" + a[2]);
+                byte[] responseBuffer = Encoding.UTF8.GetBytes(responseString);
+                string rMsg = "[사용자" + fromID + "에서 현재 접속중인 인원 수 조회요청]";
+                AppendText(txtHistory, rMsg);
+                connentedClients.TryGetValue(fromID, out Socket socket);
+                sendTo(socket, responseBuffer);
             }
             else
             {
