@@ -5,10 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using System.IO;
 
 namespace Server
 {
@@ -32,7 +34,7 @@ namespace Server
                 SocketType.Stream, ProtocolType.Tcp);
             _textAppend = new AppendTextDelegate(AppendText);
             connentedClients = new Dictionary<string, Socket>();
-
+            FilterService.FilterLoad(); // 욕설필터링을 위한 파일읽기
             clientNum = 0;
         }
 
@@ -151,7 +153,7 @@ namespace Server
             {
                 clientNum++;
                 fromID = tokens[1].Trim();
-                AppendText(txtHistory, string.Format("[매니저접속 {0}명]ID:{1},{2}",
+                AppendText(txtHistory, string.Format("[운영진접속 {0}명]ID:{1},{2}",
                    clientNum, fromID, obj.workingSocket.RemoteEndPoint.ToString()));
                 connentedClients.Add(fromID, obj.workingSocket);
                 sendAll(obj.workingSocket, obj.Buffer);
@@ -160,14 +162,15 @@ namespace Server
             {
                 fromID = tokens[1].Trim();
                 string msg = tokens[2].Trim();
-                AppendText(txtHistory, string.Format("[{0}유저의 전체메시지]:{1}", fromID, msg));
+                string filterMsg = FilterService.MessageFilter(msg);
+                AppendText(txtHistory, string.Format("[{0}유저의 전체메시지]:{1}", fromID, filterMsg));
                 sendAll(obj.workingSocket, obj.Buffer);
             }
             else if ((code.Equals("M_BR")))
             {
                 fromID = tokens[1].Trim();
                 string msg = tokens[2].Trim();
-                AppendText(txtHistory, string.Format("[{0}매니저의 전체메시지]:{1}", fromID, msg));
+                AppendText(txtHistory, string.Format("[{0}운영진의 전체메시지]:{1}", fromID, msg));
                 sendAll(obj.workingSocket, obj.Buffer);
             }
             else if ((code.Equals("TO")))
@@ -175,10 +178,12 @@ namespace Server
                 fromID = tokens[1].Trim();
                 toID = tokens[2].Trim();
                 string msg = tokens[3];
+                string filterMsg = FilterService.MessageFilter(msg);
                 string rMsg = "[From:" + fromID + "][TO:" + toID + "]" + msg;
+                byte[] buffer = Encoding.UTF8.GetBytes(code + ':' + filterMsg);
                 AppendText(txtHistory, rMsg);
                 connentedClients.TryGetValue(toID, out Socket socket); // 연결되있는 클라이언트중에서 toID에 해당하는 클라이언트 소켓을 불러옴
-                sendTo(socket, obj.Buffer);
+                sendTo(socket, buffer);
             }
             else if ((code.Equals("M_TO")))
             {
@@ -217,17 +222,17 @@ namespace Server
                 string msg = tokens[3].Trim();
                 if (level == "B")
                 {
-                    AppendText(txtHistory, string.Format("[{0}매니저의 브론즈등급메시지]:{1}", fromID, msg));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 브론즈등급메시지]:{1}", fromID, msg));
                     sendGroup(bronze, obj.Buffer);
                 }
                 else if (level == "S")
                 {
-                    AppendText(txtHistory, string.Format("[{0}매니저의 실버등급메시지]:{1}", fromID, msg));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 실버등급메시지]:{1}", fromID, msg));
                     sendGroup(sliver, obj.Buffer);
                 }
                 else if (level == "G")
                 {
-                    AppendText(txtHistory, string.Format("[{0}매니저의 골드등급메시지]:{1}", fromID, msg));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 골드등급메시지]:{1}", fromID, msg));
                     sendGroup(gold, obj.Buffer);
                 }
             }
@@ -243,7 +248,7 @@ namespace Server
                 
                 byte[] buffer = Encoding.UTF8.GetBytes(str);
                 fromID = tokens[1].Trim();
-                string rMsg = "[매니저" + fromID + "에서 현재 접속중인 인원조회요청]";
+                string rMsg = "[운영진" + fromID + "에서 현재 접속중인 인원조회요청]";
                 AppendText(txtHistory, rMsg);
                 connentedClients.TryGetValue(fromID, out Socket socket);
                 sendTo(socket, buffer);
@@ -341,5 +346,69 @@ namespace Server
 
             txtSend.Clear();
         }
-    } 
+    }
+
+    public class FilterService
+    {
+        private static List<string> words = new List<string>();
+        private static string masking;
+        // 비속어 설정 파일 로딩
+
+        private static StreamReader reader = new StreamReader(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\york.txt");
+        private static int maxLength = 1;
+
+        public static void FilterLoad()
+        {
+            // 파일 읽기
+            // 마스킹 처리 길이 계산
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                words.Add(line);
+
+                if (maxLength < line.Length)
+                    maxLength = line.Length;
+            }
+            for (int i = 0; i <= maxLength; i++)
+                masking += "*";
+        }
+
+        public static string MessageFilter(string message)
+        {
+            // 필터 확인을 위한 공백 제거
+            string replaceMessage = message.Replace(" ", "");
+            // 메시지 공백 원복을 위한 공백 위치 정보 저장
+            List<int> blankIndex = new List<int>();
+            var matches = Regex.Matches(message, " ");
+            // 공백 위치 확인
+            foreach (Match item in matches)
+            {
+                blankIndex.Add(item.Index);
+            }
+            // 메시지 첫자부터 비교
+            for (int i = 0; i < replaceMessage.Length; i++)
+            {
+                for (int j = replaceMessage.Length - i; j > 1; j--)
+                {
+                    // 비속어 목록 비교
+                    for (int k = 0; k < words.Count; k++)
+                    {
+                        // 비속어 포함 여부
+                        if (words[k] == replaceMessage.Substring(i, j))
+                        {
+                            // 비속어 길이만큼 ** 변경
+                            replaceMessage = replaceMessage.Replace(words[k], "*");
+                        }
+                    }
+                }
+            }
+            foreach (int i in blankIndex)
+            {
+                // 기존 공백 복구
+                replaceMessage = replaceMessage.Insert(i, " ");
+            }
+            return replaceMessage;
+        }
+    }
 }
+

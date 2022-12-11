@@ -1,0 +1,10 @@
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\bin\Debug\ManagerClient.exe.config
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\bin\Debug\ManagerClient.exe
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\bin\Debug\ManagerClient.pdb
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClient.csprojAssemblyReference.cache
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClient.Client.resources
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClient.Properties.Resources.resources
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClient.csproj.GenerateResource.cache
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClient.csproj.CoreCompileInputs.cache
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClient.exe
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClient.pdb

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace NormalClient
 {
@@ -30,16 +32,18 @@ namespace NormalClient
             server = new Socket(AddressFamily.InterNetwork,
     SocketType.Stream, ProtocolType.Tcp);
             _textAppend = new AppendTextDelegate(AppendText);
+            FilterService.FilterLoad();
         }
 
         void AppendText(Control ctrl, string s)
         {
+            string filterS = FilterService.MessageFilter(s);
             if (ctrl.InvokeRequired)
-                ctrl.Invoke(_textAppend, ctrl, s);
+                ctrl.Invoke(_textAppend, ctrl, filterS);
             else
             {
                 string source = ctrl.Text;
-                ctrl.Text = source + Environment.NewLine + s;
+                ctrl.Text = source + Environment.NewLine + filterS;
             }
         }
         private void btnConnect_Click(object sender, EventArgs e)
@@ -136,7 +140,7 @@ namespace NormalClient
             else if (tokens[0].Equals("M_ID"))
             {
                 string id = tokens[1];
-                AppendText(txtHistory, string.Format("[매니저접속]ID---> {0} {1}", id, FormatterService.GetCurrentDateToString()));
+                AppendText(txtHistory, string.Format("[운영진접속]ID---> {0} {1}", id, FormatterService.GetCurrentDateToString()));
             }
             else if (tokens[0].Equals("BR"))
             {
@@ -148,7 +152,7 @@ namespace NormalClient
             {
                 string fromID = tokens[1];
                 string msg = tokens[2];
-                AppendText(txtHistory, string.Format("[{0}매니저의 전체메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
+                AppendText(txtHistory, string.Format("[{0}운영진의 전체메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
             }
             else if (tokens[0].Equals("TO"))
             {
@@ -162,7 +166,7 @@ namespace NormalClient
                 string fromID = tokens[1];
                 string toID = tokens[2];
                 string msg = tokens[3];
-                AppendText(txtHistory, string.Format("[{0}매니저의 귓속말]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
+                AppendText(txtHistory, string.Format("[{0}운영진의 귓속말]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
             }
             else if (tokens[0].Equals("Success_LevelUP_S"))
             {
@@ -181,15 +185,15 @@ namespace NormalClient
                 string msg = tokens[3];
                 if (level == "B")
                 {
-                    AppendText(txtHistory, string.Format("[{0}매니저의 브론즈등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 브론즈등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
                 }
                 else if (level == "S")
                 {
-                    AppendText(txtHistory, string.Format("[{0}매니저의 실버등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 실버등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
                 }
                 else if (level == "G")
                 {
-                    AppendText(txtHistory, string.Format("[{0}매니저의 골드등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 골드등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
                 }
             }
             else if (tokens[0].Equals("Server"))
@@ -326,6 +330,69 @@ namespace NormalClient
         public static string GetCurrentDateToString(string formatter = "[yyyy-MM-dd HH시mm분]")
         {
             return DateTime.Now.ToString(formatter); // 현재 날짜를 가져오는 함수
+        }
+    }
+
+    public class FilterService
+    {
+        private static List<string> words = new List<string>();
+        private static string masking;
+        // 비속어 설정 파일 로딩
+
+        private static StreamReader reader = new StreamReader(Directory.GetParent(Environment.CurrentDirectory).Parent.FullName + @"\york.txt");
+        private static int maxLength = 1;
+
+        public static void FilterLoad()
+        {
+            // 파일 읽기
+            // 마스킹 처리 길이 계산
+            while (!reader.EndOfStream)
+            {
+                var line = reader.ReadLine();
+                words.Add(line);
+
+                if (maxLength < line.Length)
+                    maxLength = line.Length;
+            }
+            for (int i = 0; i <= maxLength; i++)
+                masking += "*";
+        }
+
+        public static string MessageFilter(string message)
+        {
+            // 필터 확인을 위한 공백 제거
+            string replaceMessage = message.Replace(" ", "");
+            // 메시지 공백 원복을 위한 공백 위치 정보 저장
+            List<int> blankIndex = new List<int>();
+            var matches = Regex.Matches(message, " ");
+            // 공백 위치 확인
+            foreach (Match item in matches)
+            {
+                blankIndex.Add(item.Index);
+            }
+            // 메시지 첫자부터 비교
+            for (int i = 0; i < replaceMessage.Length; i++)
+            {
+                for (int j = replaceMessage.Length - i; j > 1; j--)
+                {
+                    // 비속어 목록 비교
+                    for (int k = 0; k < words.Count; k++)
+                    {
+                        // 비속어 포함 여부
+                        if (words[k] == replaceMessage.Substring(i, j))
+                        {
+                            // 비속어 길이만큼 ** 변경
+                            replaceMessage = replaceMessage.Replace(words[k], "*");
+                        }
+                    }
+                }
+            }
+            foreach (int i in blankIndex)
+            {
+                // 기존 공백 복구
+                replaceMessage = replaceMessage.Insert(i, " ");
+            }
+            return replaceMessage;
         }
     }
 }

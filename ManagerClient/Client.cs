@@ -99,7 +99,7 @@ namespace ManagerClient
         {
             byte[] bDts = Encoding.UTF8.GetBytes("M_ID:" + nameID + ":");
             server.Send(bDts);
-            AppendText(txtHistory, "매니저가 서버와 연결되었습니다.");
+            AppendText(txtHistory, "운영진이 서버와 연결되었습니다.");
             AppendText(txtHistory, "특정 사용자에게 보낼 때는 사용자 M_TO:ID:메시지로 입력하시고\n" + "브로드캐스드하려면 M_BR:메시지를 입력하세요");
             AppendText(txtHistory, "특정 그룹에게 보내실려면 M_MT:LEVEL:메시지로 입력하세요\n");
         }
@@ -148,7 +148,7 @@ namespace ManagerClient
             else if (tokens[0].Equals("M_ID"))
             {
                 string id = tokens[1];
-                AppendText(txtHistory, string.Format("[매니저접속]ID---> {0} {1}", id, FormatterService.GetCurrentDateToString()));
+                AppendText(txtHistory, string.Format("[운영진접속]ID---> {0} {1}", id, FormatterService.GetCurrentDateToString()));
             }
             else if (tokens[0].Equals("BR"))
             {
@@ -160,7 +160,7 @@ namespace ManagerClient
             {
                 string fromID = tokens[1];
                 string msg = tokens[2];
-                AppendText(txtHistory, string.Format("[{0}매니저의 전체메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
+                AppendText(txtHistory, string.Format("[{0}운영진의 전체메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
             }
             else if (tokens[0].Equals("TO"))
             {
@@ -174,7 +174,7 @@ namespace ManagerClient
                 string fromID = tokens[1];
                 string toID = tokens[2];
                 string msg = tokens[3];
-                AppendText(txtHistory, string.Format("[{0}매니저의 귓속말]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
+                AppendText(txtHistory, string.Format("[{0}운영진의 귓속말]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
             }
             else if (tokens[0].Equals("Server"))
             {
@@ -222,17 +222,17 @@ namespace ManagerClient
             if (tokens[0].Equals("M_BR"))
             {
                 bDts = Encoding.UTF8.GetBytes("M_BR:" + nameID + ':' + tokens[1] + ':');
-                AppendText(txtHistory, string.Format("[매니저의 전체 전송]---> {0} {1}", tokens[1], FormatterService.GetCurrentDateToString()));
+                AppendText(txtHistory, string.Format("[운영진의 전체 전송]---> {0} {1}", tokens[1], FormatterService.GetCurrentDateToString()));
             }
             else if (tokens[0].Equals("M_TO"))
             {
                 bDts = Encoding.UTF8.GetBytes("M_TO:" + nameID + ':' + tokens[1] + ':' + tokens[2] + ':');
-                AppendText(txtHistory, string.Format("[매니저가 {0}에게 전송]---> {1} {2}", tokens[1], tokens[2], FormatterService.GetCurrentDateToString()));
+                AppendText(txtHistory, string.Format("[운영진이 {0}에게 전송]---> {1} {2}", tokens[1], tokens[2], FormatterService.GetCurrentDateToString()));
             }
             else if (tokens[0].Equals("M_MT"))
             {
                 bDts = Encoding.UTF8.GetBytes("M_MT:" + nameID + ':' + tokens[1] + ':' + tokens[2] + ':' +  FormatterService.GetCurrentDateToString());
-                AppendText(txtHistory, string.Format("[매니저의 그룹전송 전송]---> {0}", tokens[2]));
+                AppendText(txtHistory, string.Format("[운영진의 그룹전송 전송]---> {0}", tokens[2]));
             }
             else
             {

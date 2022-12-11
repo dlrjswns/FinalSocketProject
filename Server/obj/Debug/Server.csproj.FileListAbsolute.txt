@@ -7,3 +7,4 @@ C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\Server\obj\Debug\Server.csproj.Gener
 C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
 C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\Server\obj\Debug\Server.exe
 C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\Server\obj\Debug\Server.pdb
+C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\Server\obj\Debug\Server.csprojAssemblyReference.cache
