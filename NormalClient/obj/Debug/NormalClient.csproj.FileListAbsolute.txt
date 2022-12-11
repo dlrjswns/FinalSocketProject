@@ -7,4 +7,3 @@ C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.
 C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.csproj.CoreCompileInputs.cache
 C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.exe
 C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.pdb
-C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\NormalClient\obj\Debug\NormalClient.csprojAssemblyReference.cache

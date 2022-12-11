@@ -1,11 +1,11 @@
 ﻿using System.Windows.Forms;
 
-namespace NormalClient
+namespace Server
 {
     /// <summary>
     /// 메세지박스를 쉽게 표시할 수 있도록 도와주는 함수를 노출하는 클래스입니다.
     /// </summary>
-    public static class MsgBoxHelper {
+    public static class NotificationService {
         public static DialogResult Warn(string s, MessageBoxButtons buttons = MessageBoxButtons.OK, params object[] args) {
             return MessageBox.Show(f(s, args), "경고", buttons, MessageBoxIcon.Exclamation);
         }

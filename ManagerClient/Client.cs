@@ -45,13 +45,13 @@ namespace ManagerClient
         {
             if (server.Connected)
             {
-                MsgBoxHelper.Error("이미 연결되어 있습니다.");
+                NotificationService.Error("이미 연결되어 있습니다.");
                 return;
             }
             int port;
             if (!int.TryParse(txtPort.Text, out port))
             {  // port 입력 안 함
-                MsgBoxHelper.Warn("포트를 입력하세요");
+                NotificationService.Warn("포트를 입력하세요");
                 txtPort.Focus();
                 txtPort.SelectAll();
                 return;
@@ -70,7 +70,7 @@ namespace ManagerClient
 
             if (string.IsNullOrEmpty(txtNameID.Text))
             {
-                MsgBoxHelper.Warn("ID를 입력하세요");
+                NotificationService.Warn("ID를 입력하세요");
                 return;
             }
 
@@ -82,7 +82,7 @@ namespace ManagerClient
                 AppendText(txtHistory, "서버와 연결되었습니다");
 
             } catch (Exception ex) { 
-                MsgBoxHelper.Error("연결에 실패했습니다!\n 오류내용: {0}",
+                NotificationService.Error("연결에 실패했습니다!\n 오류내용: {0}",
                     MessageBoxButtons.OK, ex.Message);
                 return;
             }
@@ -183,7 +183,7 @@ namespace ManagerClient
             }
             else
             {
-                MsgBoxHelper.Warn("adminclient DataReceived 오류");
+                NotificationService.Warn("adminclient DataReceived 오류");
                 return;
             }
 
@@ -205,13 +205,13 @@ namespace ManagerClient
         {
             if (!server.IsBound) // 만약에 서버와 연결이 되지않은상태에서 전송버튼을 누른다면
             {
-                MsgBoxHelper.Warn("서버 연결을 하세요");
+                NotificationService.Warn("서버 연결을 하세요");
                 return;
             }
             string text = txtSend.Text.Trim();
             if (string.IsNullOrEmpty(text)) // 전송버튼을 누를때 보낼 메세지가 아무것도 입력되지않았다면
             {
-                MsgBoxHelper.Warn("텍스트를 입력하세요!");
+                NotificationService.Warn("텍스트를 입력하세요!");
                 return;
             }
             //byte[] bDts = Encoding.UTF8.GetBytes(nameID + " : " + text);
@@ -236,7 +236,7 @@ namespace ManagerClient
             }
             else
             {
-                MsgBoxHelper.Warn("adminclient btnSend 오류");
+                NotificationService.Warn("adminclient btnSend 오류");
                 return;
             }
             try
@@ -280,6 +280,11 @@ namespace ManagerClient
             }
             catch { }
             txtSend.Clear();
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

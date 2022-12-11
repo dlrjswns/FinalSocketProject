@@ -23,6 +23,12 @@ namespace Server
         Dictionary<string, Socket> connentedClients;
         int clientNum;
 
+        /*
+            건준이의 네트워크 설계 등급표 
+            새싹이 LV: S, Sprout 
+            초보자 LV: B, Beginner 
+            고인물 LV: M, Master
+        */
         List<string> bronze = new List<string>();//여기 안에는 id를 넣을 것
         List<string> sliver = new List<string>();
         List<string> gold = new List<string>();
@@ -54,7 +60,7 @@ namespace Server
             int port;
             if (!int.TryParse(txtPort.Text, out port))
             {  // port 입력 안 함
-                MsgBoxHelper.Warn("포트를 입력하세요");
+                NotificationService.Warn("포트를 입력하세요");
                 txtPort.Focus();
                 txtPort.SelectAll();
                 return;
@@ -141,7 +147,7 @@ namespace Server
                 bronze.Add(fromID);
                 foreach (string i in bronze)
                 {
-                    Console.WriteLine("브론즈는 = {0}", i);
+                    Console.WriteLine("새싹이는 = {0}", i);
                 }
                 AppendText(txtHistory, string.Format("[유저접속 {0}명]ID:{1},{2}",
                    clientNum, fromID, obj.workingSocket.RemoteEndPoint.ToString()));
@@ -162,8 +168,8 @@ namespace Server
             {
                 fromID = tokens[1].Trim();
                 string msg = tokens[2].Trim();
-                string filterMsg = FilterService.MessageFilter(msg);
-                AppendText(txtHistory, string.Format("[{0}유저의 전체메시지]:{1}", fromID, filterMsg));
+                //string filterMsg = FilterService.MessageFilter(msg);
+                AppendText(txtHistory, string.Format("[{0}유저의 전체메시지]:{1}", fromID, msg));
                 sendAll(obj.workingSocket, obj.Buffer);
             }
             else if ((code.Equals("M_BR")))
@@ -199,19 +205,19 @@ namespace Server
             {
                 myID = tokens[1].Trim();
                 string level = tokens[2].Trim();
-                if (level == "S")
+                if (level == "B") // 초보자로 승격요청
                 {
-                    string rMsg = myID + "가 실버레벨업 요청";
+                    string rMsg = myID + "가 초보자로 등업 요청";
                     sliver.Add(myID);
                     AppendText(txtHistory, rMsg);
-                    obj.workingSocket.Send(Encoding.UTF8.GetBytes("Success_LevelUP_S:"));
+                    obj.workingSocket.Send(Encoding.UTF8.GetBytes("Success_ToBeginner:"));
                 }
-                else if (level == "G")
+                else if (level == "M") // 고인물로 승격요청
                 {
-                    string rMsg = myID + "가 골드레벨업 요청";
+                    string rMsg = myID + "가 고인물로 등업 요청";
                     gold.Add(myID);
                     AppendText(txtHistory, rMsg);
-                    obj.workingSocket.Send(Encoding.UTF8.GetBytes("Success_LevelUP_G:"));
+                    obj.workingSocket.Send(Encoding.UTF8.GetBytes("Success_ToMaster:"));
                 }
 
             }
@@ -220,19 +226,19 @@ namespace Server
                 fromID = tokens[1].Trim();
                 string level = tokens[2].Trim();
                 string msg = tokens[3].Trim();
-                if (level == "B")
+                if (level == "S")
                 {
-                    AppendText(txtHistory, string.Format("[{0}운영진의 브론즈등급메시지]:{1}", fromID, msg));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 새싹이등급메시지]:{1}", fromID, msg));
                     sendGroup(bronze, obj.Buffer);
                 }
-                else if (level == "S")
+                else if (level == "B")
                 {
-                    AppendText(txtHistory, string.Format("[{0}운영진의 실버등급메시지]:{1}", fromID, msg));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 초보자등급메시지]:{1}", fromID, msg));
                     sendGroup(sliver, obj.Buffer);
                 }
-                else if (level == "G")
+                else if (level == "M")
                 {
-                    AppendText(txtHistory, string.Format("[{0}운영진의 골드등급메시지]:{1}", fromID, msg));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 고인물등급메시지]:{1}", fromID, msg));
                     sendGroup(gold, obj.Buffer);
                 }
             }
@@ -271,7 +277,7 @@ namespace Server
             }
             else
             {
-                MsgBoxHelper.Warn("server DataReceived 오류");
+                NotificationService.Warn("server DataReceived 오류");
                 return;
             }
 
@@ -328,13 +334,13 @@ namespace Server
         {
             if (!server.IsBound)
             {
-                MsgBoxHelper.Warn("서버를 실행하세요");
+                NotificationService.Warn("서버를 실행하세요");
                 return;
             }
             string text = txtSend.Text.Trim();
             if (string.IsNullOrEmpty(text))
             {
-                MsgBoxHelper.Warn("텍스트를 입력하세요");
+                NotificationService.Warn("텍스트를 입력하세요");
                 return;
             }
             //if (!Client.IsBound) return;

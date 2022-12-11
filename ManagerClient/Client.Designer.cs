@@ -41,46 +41,50 @@
             this.txtNameID = new System.Windows.Forms.TextBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.whoButton = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 30);
+            this.label1.Font = new System.Drawing.Font("굴림", 11F);
+            this.label1.Location = new System.Drawing.Point(13, 16);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 15);
+            this.label1.Size = new System.Drawing.Size(85, 19);
             this.label1.TabIndex = 0;
             this.label1.Text = "서버주소";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(246, 28);
+            this.label2.Font = new System.Drawing.Font("굴림", 11F);
+            this.label2.Location = new System.Drawing.Point(348, 16);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(37, 15);
+            this.label2.Size = new System.Drawing.Size(47, 19);
             this.label2.TabIndex = 1;
             this.label2.Text = "포트";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(14, 398);
+            this.label3.Font = new System.Drawing.Font("굴림", 11F);
+            this.label3.Location = new System.Drawing.Point(13, 380);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 15);
+            this.label3.Size = new System.Drawing.Size(72, 19);
             this.label3.TabIndex = 2;
-            this.label3.Text = "보낼 텍스트";
+            this.label3.Text = "메세지:";
             // 
             // txtAddress
             // 
-            this.txtAddress.Location = new System.Drawing.Point(81, 24);
+            this.txtAddress.Location = new System.Drawing.Point(99, 13);
             this.txtAddress.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtAddress.Name = "txtAddress";
-            this.txtAddress.Size = new System.Drawing.Size(147, 25);
+            this.txtAddress.Size = new System.Drawing.Size(218, 25);
             this.txtAddress.TabIndex = 3;
             // 
             // txtPort
             // 
-            this.txtPort.Location = new System.Drawing.Point(286, 24);
+            this.txtPort.Location = new System.Drawing.Point(412, 13);
             this.txtPort.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(114, 25);
@@ -89,28 +93,29 @@
             // 
             // txtHistory
             // 
+            this.txtHistory.Font = new System.Drawing.Font("굴림", 11F);
             this.txtHistory.Location = new System.Drawing.Point(16, 100);
             this.txtHistory.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtHistory.Multiline = true;
             this.txtHistory.Name = "txtHistory";
             this.txtHistory.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtHistory.Size = new System.Drawing.Size(481, 265);
+            this.txtHistory.Size = new System.Drawing.Size(647, 265);
             this.txtHistory.TabIndex = 5;
             // 
             // txtSend
             // 
-            this.txtSend.Location = new System.Drawing.Point(99, 394);
+            this.txtSend.Location = new System.Drawing.Point(84, 379);
             this.txtSend.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtSend.Name = "txtSend";
-            this.txtSend.Size = new System.Drawing.Size(263, 25);
+            this.txtSend.Size = new System.Drawing.Size(442, 25);
             this.txtSend.TabIndex = 6;
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(411, 24);
+            this.btnConnect.Location = new System.Drawing.Point(554, 13);
             this.btnConnect.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(86, 60);
+            this.btnConnect.Size = new System.Drawing.Size(109, 79);
             this.btnConnect.TabIndex = 7;
             this.btnConnect.Text = "연결";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -118,10 +123,10 @@
             // 
             // btnSend
             // 
-            this.btnSend.Location = new System.Drawing.Point(403, 394);
+            this.btnSend.Location = new System.Drawing.Point(532, 379);
             this.btnSend.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(83, 34);
+            this.btnSend.Size = new System.Drawing.Size(131, 25);
             this.btnSend.TabIndex = 8;
             this.btnSend.Text = "전송";
             this.btnSend.UseVisualStyleBackColor = true;
@@ -130,46 +135,60 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(246, 61);
+            this.label4.Font = new System.Drawing.Font("굴림", 11F);
+            this.label4.Location = new System.Drawing.Point(60, 67);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(20, 15);
+            this.label4.Size = new System.Drawing.Size(23, 19);
             this.label4.TabIndex = 9;
             this.label4.Text = "ID";
             // 
             // txtNameID
             // 
-            this.txtNameID.Location = new System.Drawing.Point(286, 58);
+            this.txtNameID.Location = new System.Drawing.Point(99, 64);
             this.txtNameID.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtNameID.Name = "txtNameID";
-            this.txtNameID.Size = new System.Drawing.Size(114, 25);
+            this.txtNameID.Size = new System.Drawing.Size(218, 25);
             this.txtNameID.TabIndex = 10;
             // 
             // checkedListBox1
             // 
+            this.checkedListBox1.Font = new System.Drawing.Font("굴림", 11F);
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Items.AddRange(new object[] {
             "전체"});
-            this.checkedListBox1.Location = new System.Drawing.Point(539, 170);
+            this.checkedListBox1.Location = new System.Drawing.Point(689, 100);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(120, 184);
+            this.checkedListBox1.Size = new System.Drawing.Size(178, 264);
             this.checkedListBox1.TabIndex = 11;
             this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
             // 
             // whoButton
             // 
-            this.whoButton.Location = new System.Drawing.Point(539, 141);
+            this.whoButton.Location = new System.Drawing.Point(689, 379);
             this.whoButton.Name = "whoButton";
-            this.whoButton.Size = new System.Drawing.Size(120, 23);
+            this.whoButton.Size = new System.Drawing.Size(178, 25);
             this.whoButton.TabIndex = 12;
-            this.whoButton.Text = "새로고침";
+            this.whoButton.Text = "연결된 사용자 조회";
             this.whoButton.UseVisualStyleBackColor = true;
             this.whoButton.Click += new System.EventHandler(this.whoButton_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("굴림", 10F);
+            this.label5.Location = new System.Drawing.Point(686, 75);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(193, 17);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "현재 연결된 사용자 목록";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // Client
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(706, 486);
+            this.ClientSize = new System.Drawing.Size(899, 425);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.whoButton);
             this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.txtNameID);
@@ -208,6 +227,7 @@
         private System.Windows.Forms.TextBox txtNameID;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.Button whoButton;
+        private System.Windows.Forms.Label label5;
     }
 }
 

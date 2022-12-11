@@ -47,16 +47,16 @@ namespace NormalClient
             }
         }
         private void btnConnect_Click(object sender, EventArgs e)
-        {
+        { 
             if (server.Connected)
             {
-                MsgBoxHelper.Error("이미 연결되어 있습니다.");
+                NotificationService.Error("이미 연결되어 있습니다.");
                 return;
             }
             int port;
             if (!int.TryParse(txtPort.Text, out port))
             {  // port 입력 안 함
-                MsgBoxHelper.Warn("포트를 입력하세요");
+                NotificationService.Warn("포트를 입력하세요");
                 txtPort.Focus();
                 txtPort.SelectAll();
                 return;
@@ -75,11 +75,17 @@ namespace NormalClient
 
             if (string.IsNullOrEmpty(txtNameID.Text))
             {
-                MsgBoxHelper.Warn("ID를 입력하세요");
+                NotificationService.Warn("ID를 입력하세요");
                 return;
             }
 
             nameID = txtNameID.Text;
+
+            /*
+                서버연결된 이후 사용자에 대한 등급을 배정
+             */
+            lvLabel.Text = "새싹이";
+            label5.Visible = true;
 
             try
             {
@@ -87,7 +93,7 @@ namespace NormalClient
                 AppendText(txtHistory, "서버와 연결되었습니다");
 
             } catch (Exception ex) { 
-                MsgBoxHelper.Error("연결에 실패했습니다!\n 오류내용: {0}",
+                NotificationService.Error("연결에 실패했습니다!\n 오류내용: {0}",
                     MessageBoxButtons.OK, ex.Message);
                 return;
             }
@@ -104,9 +110,11 @@ namespace NormalClient
         {
             byte[] bDts = Encoding.UTF8.GetBytes("ID:" + nameID + ":");
             server.Send(bDts);
+            AppendText(txtHistory, "-------------------------서버 공지-------------------------");
             AppendText(txtHistory, "유저가 서버와 연결되었습니다.");
             AppendText(txtHistory, "특정 사용자에게 보낼 때는 사용자 TO:ID:메시지로 입력하시고\n" + "브로드캐스드하려면 BR:메시지를 입력하세요");
-            AppendText(txtHistory, "레벨업을 원하신다면 하단에 레벨업버튼을 10번 누르시오");
+            AppendText(txtHistory, "등업을 원하신다면 활동 많이 하면 줄지도...?");
+            AppendText(txtHistory, "-----------------------------------------------------------");
         }
         void DataReceived(IAsyncResult ar)
         {
@@ -168,32 +176,36 @@ namespace NormalClient
                 string msg = tokens[3];
                 AppendText(txtHistory, string.Format("[{0}운영진의 귓속말]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
             }
-            else if (tokens[0].Equals("Success_LevelUP_S"))
+            else if (tokens[0].Equals("Success_ToBeginner"))
             {
-                AppendText(txtHistory, string.Format("실버로 레벨업을 축하드립니다.\n 또 레벨업을 하시려면 레벨업버튼을 15번 누르세요"));
-                lvLabel.Text = "실버";
+                AppendText(txtHistory, "-------------------------서버 공지-------------------------");
+                AppendText(txtHistory, string.Format("[초보자]로 등업을 축하드립니다.\n [고인물]로 등업을 원하시면 열심히 활동해주세요 ^^"));
+                AppendText(txtHistory, "-----------------------------------------------------------");
+                lvLabel.Text = "초보자";
             }
-            else if (tokens[0].Equals("Success_LevelUP_G"))
+            else if (tokens[0].Equals("Success_ToMaster"))
             {
-                AppendText(txtHistory, string.Format("골드로 레벨업을 축하드립니다."));
-                lvLabel.Text = "골드";
+                AppendText(txtHistory, "-------------------------서버 공지-------------------------");
+                AppendText(txtHistory, string.Format("[고인물]로 등업을 축하드립니다.\n 이제 사용자들에게 [고인물]이라는걸 마음껏 뽐내보세요 ^^"));
+                AppendText(txtHistory, "-----------------------------------------------------------");
+                lvLabel.Text = "고인물";
             }
             else if (tokens[0].Equals("M_MT"))
             {
                 string fromID = tokens[1];
                 string level = tokens[2];
                 string msg = tokens[3];
-                if (level == "B")
+                if (level == "S")
                 {
-                    AppendText(txtHistory, string.Format("[{0}운영진의 브론즈등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 새싹이등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
                 }
-                else if (level == "S")
+                else if (level == "B")
                 {
-                    AppendText(txtHistory, string.Format("[{0}운영진의 실버등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 초보자등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
                 }
-                else if (level == "G")
+                else if (level == "M")
                 {
-                    AppendText(txtHistory, string.Format("[{0}운영진의 골드등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
+                    AppendText(txtHistory, string.Format("[{0}운영진의 고인물등급메시지]---> {1} {2}", fromID, msg, FormatterService.GetCurrentDateToString()));
                 }
             }
             else if (tokens[0].Equals("Server"))
@@ -208,7 +220,7 @@ namespace NormalClient
             }
             else
             {
-                MsgBoxHelper.Warn("userclient DataReceived 오류");
+                NotificationService.Warn("userclient DataReceived 오류");
                 return;
             }
 
@@ -225,23 +237,38 @@ namespace NormalClient
 
 
         }
-
+        int count;
         private void btnSend_Click(object sender, EventArgs e)
         {
             if (!server.IsBound)
             {
-                MsgBoxHelper.Warn("서버 연결을 하세요");
+                NotificationService.Warn("서버 연결을 하세요");
                 return;
             }
             string text = txtSend.Text.Trim();
             if (string.IsNullOrEmpty(text))
             {
-                MsgBoxHelper.Warn("텍스트를 입력하세요!");
+                NotificationService.Warn("텍스트를 입력하세요!");
                 return;
             }
+
+
             //byte[] bDts = Encoding.UTF8.GetBytes(nameID + " : " + text);
             string[] tokens = text.Split(':');
             byte[] bDts = new byte[4096];
+
+            // 메세지보낸 횟수에 따라 등급을 얻게 됨
+            count++;
+            if (count == 2) // 초보자로 승격
+            {
+                bDts = Encoding.UTF8.GetBytes("LV:" + nameID + ":B:");
+                server.Send(bDts);
+            }
+            if (count == 3) // 고인물로 승격
+            {
+                bDts = Encoding.UTF8.GetBytes("LV:" + nameID + ":M:");
+                server.Send(bDts);
+            }
 
             //AppendText(txtHistory, "Client:" + text);
             if (tokens[0].Equals("BR"))
@@ -258,7 +285,7 @@ namespace NormalClient
             }
             else
             {
-                MsgBoxHelper.Warn("userclient btnSend 오류");
+                NotificationService.Warn("userclient btnSend 오류");
                 return;
             }
             try
@@ -286,31 +313,7 @@ namespace NormalClient
         {
 
         }
-        int count;
-        private void LevelUp_Click(object sender, EventArgs e)
-        {
-            if (!server.IsBound)
-            {
-                MsgBoxHelper.Warn("서버 연결을 하세요");
-                return;
-            }
-            //byte[] bDts = Encoding.UTF8.GetBytes(nameID + " : " + text);
-            byte[] bDts = new byte[4096];
-
-
-
-            count++;
-            if(count == 10)
-            {
-                bDts = Encoding.UTF8.GetBytes("LV:" + nameID + ":S:");
-                server.Send(bDts);
-            }
-            if (count == 25)
-            {
-                bDts = Encoding.UTF8.GetBytes("LV:" + nameID + ":G:");
-                server.Send(bDts);
-            }
-        }
+        
 
         private void connectedClientCountButton_Click(object sender, EventArgs e)
         {
