@@ -8,3 +8,12 @@ C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClien
 C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClient.exe
 C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClient.pdb
 C:\Users\leeky\Desktop\Chat_By_Rating_to_C-\ManagerClient\obj\Debug\ManagerClient.csprojAssemblyReference.cache
+C:\Users\CS3-20\Desktop\FinalSocketProject\ManagerClient\bin\Debug\ManagerClient.exe.config
+C:\Users\CS3-20\Desktop\FinalSocketProject\ManagerClient\bin\Debug\ManagerClient.exe
+C:\Users\CS3-20\Desktop\FinalSocketProject\ManagerClient\bin\Debug\ManagerClient.pdb
+C:\Users\CS3-20\Desktop\FinalSocketProject\ManagerClient\obj\Debug\ManagerClient.Client.resources
+C:\Users\CS3-20\Desktop\FinalSocketProject\ManagerClient\obj\Debug\ManagerClient.Properties.Resources.resources
+C:\Users\CS3-20\Desktop\FinalSocketProject\ManagerClient\obj\Debug\ManagerClient.csproj.GenerateResource.cache
+C:\Users\CS3-20\Desktop\FinalSocketProject\ManagerClient\obj\Debug\ManagerClient.csproj.CoreCompileInputs.cache
+C:\Users\CS3-20\Desktop\FinalSocketProject\ManagerClient\obj\Debug\ManagerClient.exe
+C:\Users\CS3-20\Desktop\FinalSocketProject\ManagerClient\obj\Debug\ManagerClient.pdb

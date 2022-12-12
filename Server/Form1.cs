@@ -29,9 +29,9 @@ namespace Server
             초보자 LV: B, Beginner 
             고인물 LV: M, Master
         */
-        List<string> bronze = new List<string>();//여기 안에는 id를 넣을 것
-        List<string> sliver = new List<string>();
-        List<string> gold = new List<string>();
+        List<string> sproutUsers = new List<string>();//여기 안에는 id를 넣을 것
+        List<string> beginnerUsers = new List<string>();
+        List<string> masterUsers = new List<string>();
 
         public MultiChat()
         {
@@ -144,8 +144,8 @@ namespace Server
             {
                 clientNum++;
                 fromID = tokens[1].Trim();
-                bronze.Add(fromID);
-                foreach (string i in bronze)
+                sproutUsers.Add(fromID);
+                foreach (string i in sproutUsers)
                 {
                     Console.WriteLine("새싹이는 = {0}", i);
                 }
@@ -208,20 +208,20 @@ namespace Server
                 if (level == "B") // 초보자로 승격요청
                 {
                     string rMsg = myID + "가 초보자로 등업 요청";
-                    sliver.Add(myID);
+                    beginnerUsers.Add(myID);
                     AppendText(txtHistory, rMsg);
                     obj.workingSocket.Send(Encoding.UTF8.GetBytes("Success_ToBeginner:"));
                 }
                 else if (level == "M") // 고인물로 승격요청
                 {
                     string rMsg = myID + "가 고인물로 등업 요청";
-                    gold.Add(myID);
+                    masterUsers.Add(myID);
                     AppendText(txtHistory, rMsg);
                     obj.workingSocket.Send(Encoding.UTF8.GetBytes("Success_ToMaster:"));
                 }
 
             }
-            else if ((code.Equals("M_MT")))
+            else if ((code.Equals("M_GM")))
             {
                 fromID = tokens[1].Trim();
                 string level = tokens[2].Trim();
@@ -229,17 +229,17 @@ namespace Server
                 if (level == "S")
                 {
                     AppendText(txtHistory, string.Format("[{0}운영진의 새싹이등급메시지]:{1}", fromID, msg));
-                    sendGroup(bronze, obj.Buffer);
+                    sendGroup(sproutUsers, obj.Buffer);
                 }
                 else if (level == "B")
                 {
                     AppendText(txtHistory, string.Format("[{0}운영진의 초보자등급메시지]:{1}", fromID, msg));
-                    sendGroup(sliver, obj.Buffer);
+                    sendGroup(beginnerUsers, obj.Buffer);
                 }
                 else if (level == "M")
                 {
                     AppendText(txtHistory, string.Format("[{0}운영진의 고인물등급메시지]:{1}", fromID, msg));
-                    sendGroup(gold, obj.Buffer);
+                    sendGroup(masterUsers, obj.Buffer);
                 }
             }
             else if (code.Equals("M_WHO"))
@@ -274,6 +274,32 @@ namespace Server
                 AppendText(txtHistory, rMsg);
                 connentedClients.TryGetValue(fromID, out Socket socket);
                 sendTo(socket, responseBuffer);
+            }
+            else if (code.Equals("M_BANNED"))
+            {
+                fromID = tokens[1].Trim();
+                string bannedUserID = tokens[2].Trim();
+                string rMsg = "[관리자" + fromID + "가 현재 접속중인 " + bannedUserID +"를 강퇴요청]";
+                AppendText(txtHistory, rMsg);
+            
+                connentedClients.TryGetValue(bannedUserID, out Socket socket);
+                sendTo(socket, obj.Buffer);
+            }
+            else if (code.Equals("HELP"))
+            {
+                fromID = tokens[1].Trim();
+                string rMsg = "[사용자" + fromID + "가 도움말을 요청]";
+                AppendText(txtHistory, rMsg);
+                connentedClients.TryGetValue(fromID, out Socket socket);
+                sendTo(socket, obj.Buffer);
+            }
+            else if (code.Equals("M_HELP"))
+            {
+                fromID = tokens[1].Trim();
+                string rMsg = "[운영자" + fromID + "가 도움말을 요청]";
+                AppendText(txtHistory, rMsg);
+                connentedClients.TryGetValue(fromID, out Socket socket);
+                sendTo(socket, obj.Buffer);
             }
             else
             {

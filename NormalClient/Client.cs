@@ -190,7 +190,7 @@ namespace NormalClient
                 AppendText(txtHistory, "-----------------------------------------------------------");
                 lvLabel.Text = "고인물";
             }
-            else if (tokens[0].Equals("M_MT"))
+            else if (tokens[0].Equals("M_GM"))
             {
                 string fromID = tokens[1];
                 string level = tokens[2];
@@ -211,12 +211,40 @@ namespace NormalClient
             else if (tokens[0].Equals("Server"))
             {
                 string msg = tokens[1];
+                AppendText(txtHistory, "-------------------------서버 공지-------------------------");
                 AppendText(txtHistory, string.Format("[server공지]---> {0} {1}", msg, FormatterService.GetCurrentDateToString()));
+                AppendText(txtHistory, "-----------------------------------------------------------");
             }
             else if (tokens[0].Equals("WHO"))
             {
                 string connectedClientsCount = tokens[2];
                 AppendText(txtHistory, string.Format("[현재 연결된 사용자 수]---> {0}명 접속중...", connectedClientsCount));
+            }
+            else if (tokens[0].Equals("M_BANNED"))
+            {
+                AppendText(txtHistory, "여기로와 시부ㅏㄹㅇ나ㅣㄼ;ㅣㅏㄹ;");
+                try
+                {
+                    server.Disconnect(false);
+                    server.Shutdown(SocketShutdown.Both);
+                    server.Close();
+                    NotificationService.Show("운영진에 의해 강퇴당했습니다 ^^");
+                    this.Close();
+                }
+                catch
+                { }
+            }
+            else if (tokens[0].Equals("HELP"))
+            {
+                txtHistory.Clear();
+                AppendText(txtHistory, "---------------------도움말----------------------");
+                AppendText(txtHistory, "[서버 접속]---> ID: nameID :");
+                AppendText(txtHistory, "[초보자등업요청]---> LV: nameID : B :");
+                AppendText(txtHistory, "[고인물등업요청]---> LV: nameID : M :");
+                AppendText(txtHistory, "[전체메세지전송]---> BR: nameID : 전체메세지 :");
+                AppendText(txtHistory, "[특정사용자메세지전송]---> TO: nameID : 받는사용자ID : 메세지:");
+                AppendText(txtHistory, "[현재접속사용자 수]---> WHO: nameID :");
+                AppendText(txtHistory, "------------------------------------------------");
             }
             else
             {
@@ -321,6 +349,18 @@ namespace NormalClient
             try
             {
                 bDts = Encoding.UTF8.GetBytes("WHO:" + nameID + ":");
+                server.Send(bDts);
+            }
+            catch { }
+            txtSend.Clear();
+        }
+
+        private void asistButton_Click(object sender, EventArgs e)
+        {
+            byte[] bDts = new byte[4096];
+            try
+            {
+                bDts = Encoding.UTF8.GetBytes("HELP:" + nameID + ":");
                 server.Send(bDts);
             }
             catch { }

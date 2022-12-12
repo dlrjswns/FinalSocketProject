@@ -181,6 +181,18 @@ namespace ManagerClient
                 string msg = tokens[1];
                 AppendText(txtHistory, string.Format("[server공지]---> {0} {1}", msg, FormatterService.GetCurrentDateToString()));
             }
+            else if (tokens[0].Equals("M_HELP"))
+            {
+                txtHistory.Clear();
+                AppendText(txtHistory, "---------------------도움말----------------------");
+                AppendText(txtHistory, "[서버 접속]---> M_ID: nameID :");
+                AppendText(txtHistory, "[전체공지전송]---> M_BR: nameID : 전체메세지 :");
+                AppendText(txtHistory, "[특정사용자메세지전송]---> M_TO: nameID : 받는사용자ID : 메세지 :");
+                AppendText(txtHistory, "[특정그룹메세지전송]---> M_GM: nameID : S or B or M :");
+                AppendText(txtHistory, "[특정사용자강퇴]---> M_BANNED: nameID : 벤할사용자ID :");
+                AppendText(txtHistory, "[현재접속사용자ID조회]---> M_WHO: nameID :");
+                AppendText(txtHistory, "------------------------------------------------");
+            }
             else
             {
                 NotificationService.Warn("adminclient DataReceived 오류");
@@ -229,9 +241,9 @@ namespace ManagerClient
                 bDts = Encoding.UTF8.GetBytes("M_TO:" + nameID + ':' + tokens[1] + ':' + tokens[2] + ':');
                 AppendText(txtHistory, string.Format("[운영진이 {0}에게 전송]---> {1} {2}", tokens[1], tokens[2], FormatterService.GetCurrentDateToString()));
             }
-            else if (tokens[0].Equals("M_MT"))
+            else if (tokens[0].Equals("M_GM"))
             {
-                bDts = Encoding.UTF8.GetBytes("M_MT:" + nameID + ':' + tokens[1] + ':' + tokens[2] + ':' +  FormatterService.GetCurrentDateToString());
+                bDts = Encoding.UTF8.GetBytes("M_GM:" + nameID + ':' + tokens[1] + ':' + tokens[2] + ':' +  FormatterService.GetCurrentDateToString());
                 AppendText(txtHistory, string.Format("[운영진의 그룹전송 전송]---> {0}", tokens[2]));
             }
             else
@@ -265,11 +277,6 @@ namespace ManagerClient
 
         }
 
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void whoButton_Click(object sender, EventArgs e) // 메세지전송을 위한 현재 연결된 client목록가져오기
         {
             byte[] bDts = new byte[4096];
@@ -285,6 +292,39 @@ namespace ManagerClient
         private void label5_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void bannedButton_Click(object sender, EventArgs e)
+        {
+            byte[] bDts = new byte[4096];
+            
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                if (checkedListBox1.GetItemChecked(i))
+                {
+                    string bannedUserID = checkedListBox1.Items[i].ToString();
+                    try
+                    {
+                        checkedListBox1.Items.RemoveAt(i); // Ban하고자하는 유저를 체크리스트에서 지움
+                        bDts = Encoding.UTF8.GetBytes("M_BANNED:" + nameID + ":" + bannedUserID + ":");
+                        server.Send(bDts);
+                    }
+                    catch { }
+                }
+            }
+            txtSend.Clear();
+        }
+
+        private void helpButton_Click(object sender, EventArgs e)
+        {
+            byte[] bDts = new byte[4096];
+            try
+            {
+                bDts = Encoding.UTF8.GetBytes("M_HELP:" + nameID + ":");
+                server.Send(bDts);
+            }
+            catch { }
+            txtSend.Clear();
         }
     }
 
